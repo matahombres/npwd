@@ -5,6 +5,8 @@ import { audioLogger } from './audio.utils';
 import fetch, { FormData, fileFromSync } from 'node-fetch';
 import * as fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
+import PlayerService from '../players/player.service';
+import { webhookAudioUpload } from '../lib/http-service';
 
 const path = GetResourcePath('npwd') + '/uploads';
 
@@ -30,8 +32,17 @@ class _AudioService {
     );
 
     try {
-      const form_data = new FormData();
       const blob = fileFromSync(filePath, 'audio/ogg');
+
+      if(config.voiceMessage.useWebhook){
+        
+        const player = PlayerService.getPlayer(reqObj.source);
+        const res = await webhookAudioUpload(this.TOKEN, filePath, blob, player);
+
+        return resp({ status: 'ok', data: { url: res } });
+      }
+      
+      const form_data = new FormData();
       form_data.append('recording', blob);
 
       const res = await fetch(config.voiceMessage.url, {

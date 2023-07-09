@@ -39,6 +39,7 @@
     "enabled": false,
     "authorizationHeader": "PE-Secret",
     "url": "",
+    "useWebhook": false,
     "returnedDataIndexes": ["url"]
   }
 }
