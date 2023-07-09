@@ -75,36 +75,3 @@ export async function webhookPhotoUpload(
       }),
   );
 }
-
-export async function webhookAudioUpload(
-  webhook: string,
-  audioPath: string,
-  blob: any,
-  player: Player
-){
-  const form: FormData = new FormData();
-
-  form.append('file0', blob, `fivemaudio.ogg`);
-
-  form.append(
-    'payload_json',
-    JSON.stringify({
-      content: `**NPWD:** Audio uploaded by ${player.getIdentifier()}`,
-    }),
-  );
-
-  return new Promise((resolve, reject) =>
-    fetch(webhook, {
-      method: 'POST',
-      body: form,
-    })
-      .then(async (res) => {
-        // fuck discord, not my fault I am using any here
-        const response: any = await res.json();
-        resolve(response.attachments[0].proxy_url);
-      })
-      .catch((err) => {
-        reject(err);
-      }),
-  );
-}

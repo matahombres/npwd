@@ -106,7 +106,6 @@ interface VoiceMessageConfig {
   url: string;
   authorizationHeader: string;
   authorizationPrefix: string;
-  useWebhook: boolean;
   returnedDataIndexes: Array<any>;
 }
 
